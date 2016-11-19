@@ -2,10 +2,9 @@
 
 import sys
 
-filename = sys.argv[1]
-with open(filename) as f:
-	n = int(f.readline().strip())
-	a = map(int,f.readline().strip().split(' '))
+
+n = int(raw_input().strip())
+a = map(int,raw_input().strip().split(' '))
 # input is at least length 3
 
 # 7 4 3 1 3
@@ -16,93 +15,36 @@ with open(filename) as f:
 # this is O(n^2)
 
 # 5 4 0 8 3 8 4 1 1 8
-# second pass: 5 4 0 3 4 1
-# find the max of the repeats, find the min of the repeats
-# find the max of the singleton, find the min of the singleton
-# compare max of singleton to min of repeat
-# compare min of singleton to max of repeat
 
-count_dict = {}
+# Given any list, we have a Max value, and a Min value.
+# Remove one of these, to reduce the maximum difference between the new max, min pair
+# So we need to compare the differences: (max-second min) and (second max - min), see which is smaller. This is the new smallest max-min difference
+
+max_val = -sys.maxint
+second_max = -sys.maxint
+
+min_val = sys.maxint
+second_min = sys.maxint
+
 for value in a:
-    if value not in count_dict:
-        count_dict[value] = 1
-    else:
-        count_dict[value] += 1
-        
-single_list = []
-repeaters_list = []
-for key in count_dict:
-    if count_dict[key] > 1:
-        repeaters_list.append(key)
-    else:
-        single_list.append(key)
-        
-        
-single_min = max(a)
-single_second_min = single_min
+    # found a new minimum.
+    if value < min_val:
+        second_min = min_val
+        min_val = value
+    elif value < second_min:
+        second_min = value
+    if value > max_val:
+        second_max = max_val
+        max_val = value
+    elif value > second_max:
+        second_max = value
 
-single_max = min(a)
-single_second_max = single_max
-for ele in single_list:
-    if ele < single_min:
-        single_second_min = single_min
-        single_min = ele
-    elif ele < single_second_min:
-        single_second_min = ele
-    if ele > single_max:
-        single_second_max = single_max
-        single_max = ele
-    elif ele > single_second_max:
-        single_second_max = ele
+diff_remove_min = max_val - second_min
+diff_remove_max = second_max - min_val
 
-if len(repeaters_list) == 0:
-	# we can either delete max or min single value!
-	# which one we actually choose depends on the others.
-	del a[a.index(single_max)]
-	max_val = max(a)
-	min_val = min(a)
-	diff_a = abs(max_val - min_val)
-	a.append(single_max)
-	del a[a.index(single_min)]
-	max_val = max(a)
-	min_val = min(a)
-	diff_b = abs(max_val - min_val)
-	print min([diff_a, diff_b])
-	
-else:
-    repeaters_min = min(repeaters_list)
-    repeaters_max = max(repeaters_list)    
-    diff_one = abs(repeaters_max - single_min)
-    diff_two = abs(single_max - repeaters_min)
-    diff_three = abs(single_max - single_min)
+print diff_remove_min if diff_remove_min < diff_remove_max else diff_remove_max
 
-    #find the max of the above three
-    # that number in single is what to remove
-    # if diff_three is max, we can remove either single_max or single_min. so don't consider it!
-
-    diff_max = max([diff_one, diff_two, diff_three])
-
-    #print diff_max
-    #print diff_one, diff_two, diff_three
-    if diff_max == diff_one:
-        del a[a.index(single_min)]
-        max_val = max(a)
-        min_val = min(a)
-        print abs(max_val - min_val)
-
-    elif diff_max == diff_two:
-        del a[a.index(single_max)]
-        max_val = max(a)
-        min_val = min(a)
-        print abs(max_val - min_val)    
-    elif diff_max == diff_three:
-		del a[a.index(single_max)]
-		max_val = max(a)
-		min_val = min(a)
-		diff_a = abs(max_val - min_val)
-		a.append(single_max)
-		del a[a.index(single_min)]
-		max_val = max(a)
-		min_val = min(a)
-		diff_b = abs(max_val - min_val)
-		print min([diff_a, diff_b])   
+# C++: value = a > 10 ? b : c
+#   aka if a is greater than 10, value is b. Otherwise, value is c
+# Python: value= b if a > 10 else c
+#   aka value is b if a is greater than 10, else it is c
