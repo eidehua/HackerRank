@@ -1,5 +1,12 @@
 #!/bin/python
 
+'''
+Consider a sequence of n integers, A = {a0, a1, ...an-1}. We want to delete exactly one element, ai, such that the difference between
+the smallest and largest elements in the sequence is minimal.
+Then print the minimal absolute differene
+
+'''
+
 import sys
 
 
