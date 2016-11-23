@@ -10,7 +10,7 @@ with open(filename) as f:
 
 '''
 We simplify the equation to:
-2*k*sum(b_i^2) - 2*sum(b_i)^2
+(A) = 2*k*sum(b_i^2) - 2*sum(b_i)^2
 
 So we only need to keep track of sum(b_i^2) and sum(b_i)
 '''
@@ -22,17 +22,26 @@ There is a set of k CONSECUTIVE numbers that will minimize the summation.
     Since our list is sorted, k consecutive numbers would minimize the summation. if you included a non-consecutive number, it would be farther away than the consecutive number!
 
 We need to find this set of k greedily
-So first just consider the sum(b_i^2) and sum(b_i) for the first k elements of the list
+So first just consider the value of (A) for the first k elements of the list
 
 REMEMBER: HAS TO BE A SET OF K CONSECUTIVE NUMBERS.
-So we compare the summation of elements at index {0, k}
-To the sum of elements at index {1, k+1}
-    if the summation of {0,k} is smaller:
+So we compare the value of (A) of elements at index {0, k}
+Then the value of (A) of elements at index {1, k+1}
+    if the summation (A) of {0,k} is smaller:
         compare {0,k} summation with {2, k+2} summation
     elif summation of {1, k+1} is smaller:
         comapre summation {1, k+1} with {2, k+2}
 
 '''
+# So, in the end, we find the best set of K consecutive numbers that minimzies (A) in ONE PASS.
+# Note, we need the property of consecutive numbers to achieve the O(n) time to find the set
+# Overall runtime is O(nlogn) because of the initial sort
+
+# Much of the problem is being able to break the initial equation down to a form that allows us to just keep track of
+# CHECK THE HELPER PNG for math breakdown
+# sum(b_i^2) and sum(b_i) of k consecutive numbers. 
+# Then it becomes a greedy algorithm which is simple to solve
+
 
 sorted_list = sorted(a)
 sum_a = 0                                       # keep track of sum(b_i^2)
