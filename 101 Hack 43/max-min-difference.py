@@ -9,9 +9,11 @@ Then print the minimal absolute differene
 
 import sys
 
+filename = sys.argv[1]
+with open(filename) as f:
+    n = int(f.readline().strip())
+    a = map(int,f.readline().strip().split(' '))
 
-n = int(raw_input().strip())
-a = map(int,raw_input().strip().split(' '))
 # input is at least length 3
 
 # 7 4 3 1 3
